@@ -142,6 +142,41 @@ void update(Node** node, int index, int userData) {
     newNode->data = userData;
 }
 
+int deleteusingIndex(Node** node, int index) {
+    Node* temp = *node;
+    Node* prev_node = NULL;
+
+    int i = 1;
+    Node* head = *node;
+    while(head->address != NULL) {
+        head = head->address;
+        i++;
+    }
+
+    if (index >= i){
+        return -1;
+    }
+
+    if (index==0 && temp->address!=NULL) {
+        *node = temp->address;
+        delete temp;
+        return 1;
+    } else if (index==0 && temp->address==NULL) {
+        delete temp;
+        return 0;
+    } else {
+        for (int j=0; j<i; j++){
+            if (j==index) {
+                prev_node->address = temp->address;
+                delete temp;
+                return 1;
+            }
+            prev_node = temp;
+            temp = temp->address;
+        }
+    }
+}
+
 int main() {
     Node* var = NULL;
     var = new Node();
@@ -168,7 +203,7 @@ int main() {
     while (true){
         int option = 0;
         cout<<"------------------------------------------------------------------------------------"<<endl;
-        cout<<"Options"<<endl<<"1. Push Data"<<endl<<"2. Append Data"<<endl<<"3. Insert after a Data"<<endl<<"4. Search"<<endl<<"5. Delete"<<endl<<"6. Update"<<endl<<"0. Exit"<<endl<<"Your Option:";
+        cout<<"Options"<<endl<<"1. Push Data"<<endl<<"2. Append Data"<<endl<<"3. Insert after a Data"<<endl<<"4. Search"<<endl<<"5. Delete"<<endl<<"6. Update"<<endl<<"7. Delete using Index No."<<endl<<"0. Exit"<<endl<<"Your Option:";
         cin>>option;
 
         if (option == 0) {
@@ -225,7 +260,7 @@ int main() {
                     print(var);
                     continue;
                 }
-            } else if (option ==6) {
+            } else if (option == 6) {
                 int index = 0;
                 int data = 0;
                 cout<<"Please enter index number:";
@@ -235,6 +270,22 @@ int main() {
                 update(&var, index, data);
                 print(var);
                 continue;
+            } else if (option == 7) {
+                int index = 0;
+                cout<<"Please enter index number to delete:";
+                cin>>index;
+                int result = deleteusingIndex(&var, index);
+                if (result == 0) {
+                    cout<<endl<<"You have no data now..."<<endl;
+                    break;
+                } else if (result == -1) {
+                    cout<<endl<<"Invalid Index No."<<endl<<endl;
+                    print(var);
+                    continue;
+                } else {
+                    print(var);
+                    continue;
+                }
             } else {
                 continue;
             }
